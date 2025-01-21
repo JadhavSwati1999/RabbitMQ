@@ -1,0 +1,54 @@
+replicaCount: 3
+
+image:
+  repository: rabbitmq
+  tag: "3-management"
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  size: 8Gi
+  storageClass: "standard"  
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1"
+
+rabbitmq:
+  username: admin
+  password: adminpassword
+  erlangCookie: "rabbitmqcookie"
+
+healthchecks:
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 60
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 20
+
+service:
+  internal:
+    port: 5672
+    targetPort: 5672
+    name: rabbitmq-internal
+  management:
+    port: 15672
+    targetPort: 15672
+    name: rabbitmq-management
+serviceAccount:
+  create: true
+ingress:
+  enabled: false
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+service:
+  type: ClusterIP
+

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-internal
+spec:
+  clusterIP: None
+  selector:
+    app: rabbitmq
+  ports:
+    - port: 5672
+      targetPort: 5672
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-management
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - port: 15672
+      targetPort: 15672
+
